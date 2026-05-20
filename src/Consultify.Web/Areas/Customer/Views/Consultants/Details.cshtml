@@ -1,0 +1,79 @@
+@model ConsultantDetailVM
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<h1>@Model.FullName</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Profile</h5>
+                <p><strong>Specialization:</strong> @(Model.Specialization ?? "N/A")</p>
+                <p><strong>Hourly Rate:</strong> @(Model.HourlyRate.HasValue ? Model.HourlyRate.Value.ToString("C0") + "/hr" : "N/A")</p>
+                <p><strong>Experience:</strong> @(Model.YearsOfExperience.HasValue ? Model.YearsOfExperience + " years" : "N/A")</p>
+                <p>
+                    <strong>Rating:</strong>
+                    <span class="text-warning">&#9733; @Model.AverageRating.ToString("0.0")</span>
+                    <span class="text-muted">(@Model.ReviewCount reviews)</span>
+                </p>
+                @if (!string.IsNullOrEmpty(Model.Bio))
+                {
+                    <p><strong>Bio:</strong><br />@Model.Bio</p>
+                }
+            </div>
+        </div>
+
+        @if (Model.Reviews.Count > 0)
+        {
+            <div class="card">
+                <div class="card-header"><h5>Reviews</h5></div>
+                <div class="card-body">
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="mb-3">
+                            <strong>@review.CustomerName</strong>
+                            <span class="text-warning">@string.Concat(Enumerable.Repeat("&#9733;", review.Rating))</span>
+                            <br />
+                            <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                            @if (!string.IsNullOrEmpty(review.Comment))
+                            {
+                                <p class="mb-0">@review.Comment</p>
+                            }
+                        </div>
+                        <hr />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header"><h5>Available Slots (Next 14 Days)</h5></div>
+            <div class="card-body">
+                @if (Model.AvailableSlots.Count == 0)
+                {
+                    <p class="text-muted">No available slots in the next 14 days.</p>
+                }
+                else
+                {
+                    @foreach (var group in Model.AvailableSlots)
+                    {
+                        <h6 class="mt-3">@group.Key.ToString("dddd, MMMM dd")</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var slot in group.Value)
+                            {
+                                <a asp-area="Customer" asp-controller="Booking" asp-action="Confirm" asp-route-slotId="@slot.Id"
+                                   class="btn btn-outline-success btn-sm">
+                                    @slot.StartTime.ToString("HH:mm") - @slot.EndTime.ToString("HH:mm")
+                                </a>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

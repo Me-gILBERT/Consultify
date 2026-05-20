@@ -1,0 +1,33 @@
+@model ConsultantProfile
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>My Profile</h1>
+    <a asp-action="Edit" class="btn btn-primary">Edit Profile</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.User.FullName</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.User.Email</dd>
+
+            <dt class="col-sm-3">Specialization</dt>
+            <dd class="col-sm-9">@(Model.Specialization ?? "Not specified")</dd>
+
+            <dt class="col-sm-3">Hourly Rate</dt>
+            <dd class="col-sm-9">@(Model.HourlyRate.HasValue ? $"${Model.HourlyRate:F2}/hr" : "Not specified")</dd>
+
+            <dt class="col-sm-3">Experience</dt>
+            <dd class="col-sm-9">@(Model.YearsOfExperience.HasValue ? $"{Model.YearsOfExperience} years" : "Not specified")</dd>
+
+            <dt class="col-sm-3">Bio</dt>
+            <dd class="col-sm-9">@(Model.Bio ?? "No bio yet.")</dd>
+        </dl>
+    </div>
+</div>

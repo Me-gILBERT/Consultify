@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center py-5">
+    <h1 class="display-4">Welcome to Consultify</h1>
+    <p class="lead">Connect with expert consultants and book 30-minute consultation sessions.</p>
+
+    @if (!User.Identity?.IsAuthenticated == true)
+    {
+        <div class="mt-4">
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg me-2">Get Started</a>
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary btn-lg">Sign In</a>
+        </div>
+    }
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h3 class="card-title">&#128100; For Consultants</h3>
+                <p class="card-text">Set your availability, manage your schedule, and grow your practice.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h3 class="card-title">&#128269; For Customers</h3>
+                <p class="card-text">Browse experts, pick a time that works for you, and book instantly.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h3 class="card-title">&#128197; 30-Min Sessions</h3>
+                <p class="card-text">Every session is a focused 30-minute block. No wasted time.</p>
+            </div>
+        </div>
+    </div>
+</div>

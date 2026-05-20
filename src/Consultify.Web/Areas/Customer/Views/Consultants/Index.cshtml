@@ -1,0 +1,65 @@
+@model BrowseConsultantsVM
+@{
+    ViewData["Title"] = "Browse Consultants";
+}
+
+<h1>Browse Consultants</h1>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <input type="text" name="search" class="form-control" placeholder="Search by name or specialization..." value="@Model.SearchTerm" />
+    </div>
+    <div class="col-md-3">
+        <select name="specialization" class="form-select">
+            <option value="">All Specializations</option>
+            @foreach (var spec in ViewBag.Specializations)
+            {
+                <option value="@spec" selected="@(ViewBag.CurrentSpecialization == spec ? true : null)">@spec</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+@if (Model.Consultants.Count == 0)
+{
+    <div class="alert alert-info">No consultants found matching your criteria.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var consultant in Model.Consultants)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@consultant.FullName</h5>
+                        <p class="card-text">
+                            <strong>@consultant.Specialization</strong><br />
+                            @if (consultant.HourlyRate.HasValue)
+                            {
+                                <span class="text-muted">@consultant.HourlyRate.Value.ToString("C0")/hr</span><br />
+                            }
+                            <span class="text-warning">&#9733; @consultant.AverageRating.ToString("0.0")</span>
+                            <span class="text-muted">(@consultant.ReviewCount reviews)</span>
+                        </p>
+                        <a asp-action="Details" asp-route-id="@consultant.ProfileId" class="btn btn-outline-primary">View Profile & Book</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Page ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-search="@Model.SearchTerm" asp-route-specialization="@Model.SpecializationFilter">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

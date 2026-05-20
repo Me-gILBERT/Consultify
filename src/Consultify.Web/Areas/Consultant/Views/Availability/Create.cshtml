@@ -1,0 +1,56 @@
+@model CreateTimeSlotVM
+@{
+    ViewData["Title"] = "Create Time Slots";
+}
+
+<h1>Create Time Slots</h1>
+<p class="text-muted">Slots will be automatically split into 30-minute intervals.</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Date" class="form-label"></label>
+                <input asp-for="Date" class="form-control" type="date" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StartTime" class="form-label">Start Time</label>
+                <input asp-for="StartTime" class="form-control" type="time" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndTime" class="form-label">End Time</label>
+                <input asp-for="EndTime" class="form-control" type="time" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Slots</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Example</div>
+            <div class="card-body">
+                <p>If you set <strong>Start 09:00</strong> and <strong>End 12:00</strong>, the system creates:</p>
+                <ul>
+                    <li>09:00 - 09:30</li>
+                    <li>09:30 - 10:00</li>
+                    <li>10:00 - 10:30</li>
+                    <li>10:30 - 11:00</li>
+                    <li>11:00 - 11:30</li>
+                    <li>11:30 - 12:00</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

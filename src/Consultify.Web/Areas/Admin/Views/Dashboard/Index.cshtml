@@ -1,0 +1,92 @@
+@model DashboardStatsVM
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text display-6">@Model.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Consultants</h5>
+                <p class="card-text display-6">@Model.TotalConsultants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Customers</h5>
+                <p class="card-text display-6">@Model.TotalCustomers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Appointments</h5>
+                <p class="card-text display-6">@Model.TotalAppointments</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Appointments by Status</h5></div>
+            <div class="card-body">
+                @if (Model.AppointmentsByStatus.Count == 0)
+                {
+                    <p class="text-muted">No appointments yet.</p>
+                }
+                else
+                {
+                    <table class="table">
+                        <tbody>
+                            @foreach (var kvp in Model.AppointmentsByStatus)
+                            {
+                                <tr>
+                                    <td>@kvp.Key</td>
+                                    <td><strong>@kvp.Value</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Recent Appointments</h5></div>
+            <div class="card-body">
+                @if (Model.RecentAppointments.Count == 0)
+                {
+                    <p class="text-muted">No recent appointments.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var a in Model.RecentAppointments)
+                        {
+                            <li class="list-group-item">
+                                <strong>@a.ConsultantProfile?.User?.FullName</strong> with @a.CustomerUser.FullName
+                                <span class="badge bg-secondary float-end">@a.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>

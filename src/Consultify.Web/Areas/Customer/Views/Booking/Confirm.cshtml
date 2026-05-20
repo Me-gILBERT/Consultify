@@ -1,0 +1,41 @@
+@model BookConfirmVM
+@{
+    ViewData["Title"] = "Confirm Booking";
+}
+
+<h1>Confirm Booking</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@Model.ConsultantName</h5>
+                <p><strong>Date:</strong> @Model.StartTime.ToString("dddd, MMMM dd, yyyy")</p>
+                <p><strong>Time:</strong> @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")</p>
+                <p><strong>Duration:</strong> 30 minutes</p>
+            </div>
+        </div>
+
+        <form asp-action="Confirm" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="TimeSlotId" />
+            <input type="hidden" asp-for="ConsultantName" />
+            <input type="hidden" asp-for="StartTime" />
+            <input type="hidden" asp-for="EndTime" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Notes" class="form-label">Notes (optional)</label>
+                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Add any notes for the consultant..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Confirm Booking</button>
+            <a asp-area="Customer" asp-controller="Consultants" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

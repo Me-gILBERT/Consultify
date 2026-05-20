@@ -1,0 +1,61 @@
+@{
+    ViewData["Title"] = "Customer Dashboard";
+}
+
+<h1>My Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Upcoming Appointments</h5></div>
+            <div class="card-body">
+                @if (ViewBag.Upcoming.Count == 0)
+                {
+                    <p class="text-muted">No upcoming appointments.</p>
+                    <a asp-area="Customer" asp-controller="Consultants" asp-action="Index" class="btn btn-primary">Browse Consultants</a>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var a in ViewBag.Upcoming)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <strong>@a.ConsultantProfile.User.FullName</strong><br />
+                                    <small>@a.TimeSlot.StartTime.ToString("MMM dd, yyyy HH:mm")</small>
+                                </span>
+                                <span class="badge bg-success rounded-pill">@a.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Past Appointments</h5></div>
+            <div class="card-body">
+                @if (ViewBag.Past.Count == 0)
+                {
+                    <p class="text-muted">No past appointments.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var a in ViewBag.Past)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <strong>@a.ConsultantProfile.User.FullName</strong><br />
+                                    <small>@a.TimeSlot.StartTime.ToString("MMM dd, yyyy HH:mm")</small>
+                                </span>
+                                <span class="badge bg-secondary rounded-pill">@a.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>

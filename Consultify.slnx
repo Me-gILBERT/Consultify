@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Consultify.Web/Consultify.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Consultify.Web.Tests/Consultify.Web.Tests.csproj" />
+  </Folder>
+</Solution>

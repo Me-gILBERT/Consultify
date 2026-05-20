@@ -1,0 +1,67 @@
+@model Dictionary<DateTime, List<TimeSlot>>
+@{
+    ViewData["Title"] = "My Time Slots";
+}
+
+<div class="d-flex justify-content-between mb-3">
+    <h1>My Time Slots</h1>
+    <a asp-action="Create" class="btn btn-primary">+ Create Slots</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No time slots created yet. <a asp-action="Create">Create your first slot</a>.</div>
+}
+
+@foreach (var group in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>@group.Key.ToString("dddd, MMMM dd yyyy")</strong>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var slot in group.Value)
+                    {
+                        <tr>
+                            <td>@slot.StartTime.ToString("HH:mm")</td>
+                            <td>@slot.EndTime.ToString("HH:mm")</td>
+                            <td>
+                                @if (slot.IsBooked)
+                                {
+                                    <span class="badge bg-secondary">Booked</span>
+                                }
+                                else if (slot.StartTime < DateTime.UtcNow)
+                                {
+                                    <span class="badge bg-warning text-dark">Past</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Available</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!slot.IsBooked && slot.StartTime > DateTime.UtcNow)
+                                {
+                                    <form asp-action="Delete" asp-route-id="@slot.Id" method="post" onsubmit="return confirm('Delete this slot?')">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

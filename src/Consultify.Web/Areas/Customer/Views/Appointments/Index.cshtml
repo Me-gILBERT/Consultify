@@ -1,0 +1,60 @@
+@model List<Appointment>
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<h1>My Appointments</h1>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        No appointments yet.
+        <a asp-area="Customer" asp-controller="Consultants" asp-action="Index">Browse consultants</a> to book your first one.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Consultant</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.ConsultantProfile.User.FullName</td>
+                    <td>@a.TimeSlot.StartTime.ToString("MMM dd, yyyy")</td>
+                    <td>@a.TimeSlot.StartTime.ToString("HH:mm") - @a.TimeSlot.EndTime.ToString("HH:mm")</td>
+                    <td>
+                        <span class="badge @(a.Status == AppointmentStatus.Scheduled ? "bg-success" :
+                                             a.Status == AppointmentStatus.Completed ? "bg-secondary" :
+                                             a.Status == AppointmentStatus.Cancelled ? "bg-danger" : "bg-warning")">
+                            @a.Status
+                        </span>
+                    </td>
+                    <td>@a.Notes</td>
+                    <td>
+                        @if (a.Status == AppointmentStatus.Scheduled && a.TimeSlot.StartTime > DateTime.UtcNow.AddHours(24))
+                        {
+                            <form asp-action="Cancel" asp-route-id="@a.Id" method="post" onsubmit="return confirm('Cancel this appointment?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                            </form>
+                        }
+                        @if (a.Status == AppointmentStatus.Completed && a.Review == null)
+                        {
+                            <a asp-area="Customer" asp-controller="Reviews" asp-action="Create" asp-route-appointmentId="@a.Id" class="btn btn-sm btn-outline-primary">Review</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

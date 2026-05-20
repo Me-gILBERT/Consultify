@@ -1,0 +1,44 @@
+@model ReviewListVM
+@{
+    ViewData["Title"] = "All Reviews";
+}
+
+<h1>All Reviews</h1>
+
+@if (Model.Reviews.Count == 0)
+{
+    <div class="alert alert-info">No reviews yet.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Consultant</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Reviews)
+            {
+                <tr>
+                    <td>@r.CustomerUser.FullName</td>
+                    <td>@r.ConsultantProfile?.User?.FullName</td>
+                    <td><span class="text-warning">&#9733; @r.Rating</span></td>
+                    <td>@(r.Comment ?? "-")</td>
+                    <td>@r.CreatedAt.ToString("MMM dd, yyyy")</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@r.Id" method="post" onsubmit="return confirm('Delete this review?')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
