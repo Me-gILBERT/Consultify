@@ -151,3 +151,8 @@ Tests use EF Core InMemory database (no PostgreSQL required) and cover:
 - 24-hour cancellation enforcement
 - 30-minute slot auto-split generation
 - Slot deletion protection for booked slots
+
+## Documentation
+
+- `plan_consultify_4.md` — Full architecture plan
+- `LOGBOOK.md` — Detailed build logbook
